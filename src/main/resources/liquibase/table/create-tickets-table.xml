@@ -33,5 +33,13 @@
     </createTable>
     
   </changeSet>
+
+  <changeSet id="add-column-to-tickets-table" author="Oleg Alekseenko">
+    <addColumn tableName="tickets">
+      <column name="is_available" type="BOOLEAN" defaultValueBoolean="true">
+        <constraints nullable="false"/>
+      </column>
+    </addColumn>
+  </changeSet>
   
 </databaseChangeLog>
