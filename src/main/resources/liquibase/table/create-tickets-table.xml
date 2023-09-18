@@ -5,29 +5,29 @@
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
 		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
 
-  <changeSet id="create-routes-table" author="Oleg Alekseenko">
+  <changeSet id="create-tickets-table" author="Oleg Alekseenko">
 
     <preConditions>
       <not>
-        <tableExists tableName="routes"/>
+        <tableExists tableName="tickets"/>
       </not>
     </preConditions>
 
-    <createTable tableName="routes">
+    <createTable tableName="tickets">
       <column name="id" type="BIGINT" autoIncrement="true">
         <constraints primaryKey="true"/>
       </column>
-      <column name="start_point" type="VARCHAR(16)">
+      <column name="date_time" type="TIMESTAMP">
         <constraints nullable="false"/>
       </column>
-      <column name="end_point" type="VARCHAR(16)">
+      <column name="seat_number" type="INTEGER">
         <constraints nullable="false"/>
       </column>
-      <column name="duration" type="INTEGER">
+      <column name="price" type="NUMERIC(9, 4)">
         <constraints nullable="false"/>
       </column>
-      <column name="carrier_id" type="BIGINT">
-        <constraints references="carriers(id)" foreignKeyName="fk_route_carrier"
+      <column name="route_id" type="BIGINT">
+        <constraints references="routes(id)" foreignKeyName="fk_ticket_route"
           nullable="false" deleteCascade="true"/>
       </column>
     </createTable>
