@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+  <changeSet id="create-carriers-table" author="Oleg Alekseenko">
+
+    <preConditions>
+      <not>
+        <tableExists tableName="carriers"/>
+      </not>
+    </preConditions>
+
+    <createTable tableName="carriers">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="title" type="VARCHAR(16)">
+        <constraints unique="true" nullable="false"/>
+      </column>
+      <column name="phone" type="VARCHAR(16)">
+        <constraints unique="true" nullable="false"/>
+      </column>
+    </createTable>
+    
+  </changeSet>
+  
+</databaseChangeLog>

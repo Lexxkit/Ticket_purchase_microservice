@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+  <changeSet id="create-routes-table" author="Oleg Alekseenko">
+
+    <preConditions>
+      <not>
+        <tableExists tableName="routes"/>
+      </not>
+    </preConditions>
+
+    <createTable tableName="routes">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="startPoint" type="VARCHAR(16)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="endPoint" type="VARCHAR(16)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="duration" type="INTEGER">
+        <constraints nullable="false"/>
+      </column>
+      <column name="carrier_id" type="BIGINT">
+        <constraints references="carriers(id)" nullable="false" deleteCascade="true"/>
+      </column>
+    </createTable>
+    
+  </changeSet>
+  
+</databaseChangeLog>

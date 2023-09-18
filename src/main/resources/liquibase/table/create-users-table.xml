@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+  <changeSet id="create-users-table" author="Oleg Alekseenko">
+
+    <preConditions>
+      <not>
+        <tableExists tableName="users"/>
+      </not>
+    </preConditions>
+
+    <createTable tableName="users">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="login" type="VARCHAR(16)">
+        <constraints unique="true" nullable="false"/>
+      </column>
+      <column name="password_hash" type="VARCHAR(48)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="name" type="VARCHAR(16)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="surname" type="VARCHAR(32)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="patronymic_name" type="VARCHAR(16)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+  </changeSet>
+
+</databaseChangeLog>
