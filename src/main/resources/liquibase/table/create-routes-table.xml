@@ -23,7 +23,7 @@
       <column name="end_point" type="VARCHAR(16)">
         <constraints nullable="false"/>
       </column>
-      <column name="duration" type="INTEGER">
+      <column name="duration_in_minutes" type="INTEGER">
         <constraints nullable="false"/>
       </column>
       <column name="carrier_id" type="BIGINT">
