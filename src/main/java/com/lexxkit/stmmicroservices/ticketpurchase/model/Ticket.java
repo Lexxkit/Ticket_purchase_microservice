@@ -11,5 +11,5 @@ public class Ticket {
   private int seatNumber;
   private BigDecimal price;
   private Route route;
-  private boolean isAvailable;
+  private Boolean isAvailable;
 }

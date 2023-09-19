@@ -37,9 +37,17 @@ public class TicketRepositoryImpl implements TicketRepository {
   @Override
   public Optional<Ticket> findById(long id) {
     return jdbcTemplate.queryForStream(
-        "select * from tickets where id = ?",
+        "select id, date_time, seat_number, price, route_id, is_available from tickets where id = ?",
         new BeanPropertyRowMapper<>(Ticket.class),
         id
     ).findAny();
+  }
+
+  @Override
+  public int update(Ticket ticket) {
+    return jdbcTemplate.update(
+        "update tickets set is_available = ? where id = ?",
+        ticket.getIsAvailable(), ticket.getId()
+    );
   }
 }

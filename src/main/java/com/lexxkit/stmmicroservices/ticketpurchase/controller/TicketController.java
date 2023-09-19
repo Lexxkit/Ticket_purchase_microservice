@@ -10,6 +10,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -37,5 +38,10 @@ public class TicketController {
   @GetMapping("/{id}")
   public TicketDto getTicketById(@PathVariable long id) {
     return ticketService.getTicketById(id);
+  }
+
+  @PostMapping("/{ticket_id}/purchase")
+  public TicketDto buyTicket(@PathVariable(name = "ticket_id") long id) {
+    return ticketService.buyTicket(id);
   }
 }

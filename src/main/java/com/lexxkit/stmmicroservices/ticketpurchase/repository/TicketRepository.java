@@ -9,4 +9,6 @@ public interface TicketRepository {
   List<Ticket> findAllAvailable();
 
   Optional<Ticket> findById(long id);
+
+  int update(Ticket ticket);
 }
