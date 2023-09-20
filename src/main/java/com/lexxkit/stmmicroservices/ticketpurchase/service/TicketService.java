@@ -6,6 +6,7 @@ import com.lexxkit.stmmicroservices.ticketpurchase.exception.TicketNotFoundExcep
 import com.lexxkit.stmmicroservices.ticketpurchase.mapper.TicketMapper;
 import com.lexxkit.stmmicroservices.ticketpurchase.model.Ticket;
 import com.lexxkit.stmmicroservices.ticketpurchase.repository.TicketRepository;
+import com.lexxkit.stmmicroservices.ticketpurchase.util.Page;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -20,8 +21,8 @@ public class TicketService {
   private final TicketRepository ticketRepository;
   private final TicketMapper ticketMapper;
 
-  public List<TicketDto> getAllAvailableTickets() {
-    return ticketMapper.toDtoList(ticketRepository.findAllAvailable());
+  public List<TicketDto> getAllAvailableTickets(Page page) {
+    return ticketMapper.toDtoList(ticketRepository.findAllAvailable(page));
   }
 
   public TicketDto getTicketById(long id) {

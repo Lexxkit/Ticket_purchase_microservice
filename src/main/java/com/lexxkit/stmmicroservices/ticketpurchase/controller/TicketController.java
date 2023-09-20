@@ -2,6 +2,7 @@ package com.lexxkit.stmmicroservices.ticketpurchase.controller;
 
 import com.lexxkit.stmmicroservices.ticketpurchase.dto.TicketDto;
 import com.lexxkit.stmmicroservices.ticketpurchase.service.TicketService;
+import com.lexxkit.stmmicroservices.ticketpurchase.util.Page;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -31,8 +33,9 @@ public class TicketController {
       }
   )
   @GetMapping
-  public List<TicketDto> getAllTickets() {
-    return ticketService.getAllAvailableTickets();
+  public List<TicketDto> getAllTickets(@RequestParam(value = "page", defaultValue = "1") long page,
+                                       @RequestParam(value = "size", defaultValue = "10") long size) {
+    return ticketService.getAllAvailableTickets(Page.of(page, size));
   }
 
   @GetMapping("/{id}")

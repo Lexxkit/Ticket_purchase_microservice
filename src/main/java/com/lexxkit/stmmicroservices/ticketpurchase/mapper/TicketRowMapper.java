@@ -5,11 +5,9 @@ import com.lexxkit.stmmicroservices.ticketpurchase.model.Route;
 import com.lexxkit.stmmicroservices.ticketpurchase.model.Ticket;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
-@Slf4j
 @Component
 public class TicketRowMapper implements RowMapper<Ticket> {
 
@@ -34,9 +32,6 @@ public class TicketRowMapper implements RowMapper<Ticket> {
     ticket.setDateTime(rs.getTimestamp("date_time").toLocalDateTime());
     ticket.setRoute(route);
 
-    log.info(carrier.toString());
-    log.info(route.toString());
-    log.info(ticket.toString());
     return ticket;
   }
 }

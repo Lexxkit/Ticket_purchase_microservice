@@ -2,6 +2,7 @@ package com.lexxkit.stmmicroservices.ticketpurchase.repository.impl;
 
 import com.lexxkit.stmmicroservices.ticketpurchase.model.Ticket;
 import com.lexxkit.stmmicroservices.ticketpurchase.repository.TicketRepository;
+import com.lexxkit.stmmicroservices.ticketpurchase.util.Page;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -23,13 +24,14 @@ public class TicketRepositoryImpl implements TicketRepository {
    * @return List of available tickets.
    */
   @Override
-  public List<Ticket> findAllAvailable() {
+  public List<Ticket> findAllAvailable(Page page) {
     return jdbcTemplate.query(
         "select t.*, r.id as r_id, r.start_point, r.end_point, c.id as c_id, c.title from tickets t "
             + "left join routes r on t.route_id = r.id "
             + "left join carriers c on r.carrier_id = c.id "
-            + "where t.is_available = true AND t.date_time > NOW()",
-        rowMapper
+            + "where t.is_available = true AND t.date_time > NOW() "
+            + "order by t.id limit ? offset ?",
+        rowMapper, page.getLimit(), page.getOffset()
     );
   }
 
