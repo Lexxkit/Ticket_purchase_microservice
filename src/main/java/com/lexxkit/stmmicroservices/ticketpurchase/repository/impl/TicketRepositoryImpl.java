@@ -7,6 +7,7 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Repository;
 public class TicketRepositoryImpl implements TicketRepository {
 
   private final JdbcTemplate jdbcTemplate;
+  private final RowMapper<Ticket> rowMapper;
 
   /**
    * Find all tickets that is available and with dateTime greater than now.
@@ -23,8 +25,11 @@ public class TicketRepositoryImpl implements TicketRepository {
   @Override
   public List<Ticket> findAllAvailable() {
     return jdbcTemplate.query(
-        "select * from tickets where is_available = true AND date_time > NOW()",
-        new BeanPropertyRowMapper<>(Ticket.class)
+        "select t.*, r.id as r_id, r.start_point, r.end_point, c.id as c_id, c.title from tickets t "
+            + "left join routes r on t.route_id = r.id "
+            + "left join carriers c on r.carrier_id = c.id "
+            + "where t.is_available = true AND t.date_time > NOW()",
+        rowMapper
     );
   }
 

@@ -15,5 +15,5 @@ public class TicketDto {
   private int seatNumber;
   @Min(value = 0, message = "Price cannot be negative.")
   private BigDecimal price;
-//  private String carrierTitle;
+  private String carrierTitle;
 }
