@@ -36,4 +36,8 @@
 
   </changeSet>
 
+  <changeSet id="alter-password-length" author="Oleg Alekseenko">
+    <modifyDataType tableName="users" columnName="password_hash" newDataType="VARCHAR(256)"/>
+  </changeSet>
+
 </databaseChangeLog>

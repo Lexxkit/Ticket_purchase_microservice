@@ -5,9 +5,12 @@ import com.lexxkit.stmmicroservices.ticketpurchase.dto.RegisterUserDto;
 import com.lexxkit.stmmicroservices.ticketpurchase.exception.UserNotFoundException;
 import com.lexxkit.stmmicroservices.ticketpurchase.model.User;
 import com.lexxkit.stmmicroservices.ticketpurchase.repository.UserRepository;
+import com.lexxkit.stmmicroservices.ticketpurchase.security.MyUserDetailsService;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,6 +18,8 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AuthService {
 
+  private final MyUserDetailsService manager;
+  private final PasswordEncoder encoder;
   private final UserRepository userRepository;
 
   public boolean register(RegisterUserDto registerUserDto) {
@@ -25,7 +30,7 @@ public class AuthService {
     }
     User newUser = User.builder()
         .login(registerUserDto.getLogin())
-        .passwordHash(registerUserDto.getPassword())
+        .passwordHash(encoder.encode(registerUserDto.getPassword()))
         .name(registerUserDto.getName())
         .surname(registerUserDto.getSurname())
         .patronymicName(registerUserDto.getPatronymicName())
@@ -35,8 +40,9 @@ public class AuthService {
   }
 
   public boolean login(LoginUserDto loginUserDto) {
-    User userByLogin = userRepository.findUserByLogin(loginUserDto.getLogin())
-        .orElseThrow(UserNotFoundException::new);
-    return userByLogin.getPasswordHash().equals(loginUserDto.getPassword());
+    UserDetails userDetails = manager.loadUserByUsername(loginUserDto.getLogin());
+    String password = userDetails.getPassword();
+
+    return encoder.matches(loginUserDto.getPassword(), password);
   }
 }
