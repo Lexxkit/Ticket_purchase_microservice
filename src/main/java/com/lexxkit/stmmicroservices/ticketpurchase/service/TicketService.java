@@ -27,19 +27,21 @@ public class TicketService {
 
   public TicketDto getTicketById(long id) {
     log.info(ticketRepository.findById(id).toString());
-    return ticketMapper.toDto(ticketRepository.findById(id).orElseThrow(TicketNotFoundException::new));
+    return ticketMapper.toDto(ticketRepository.findById(id).orElseThrow(
+        () -> new TicketNotFoundException(String.format("There is no ticket with id = %d.", id))
+    ));
   }
 
   public TicketDto buyTicket(long id) {
     Ticket ticket = ticketRepository.findById(id).orElseThrow(TicketNotFoundException::new);
     if (!ticket.getIsAvailable() || ticket.getDateTime().isBefore(LocalDateTime.now())) {
       log.info("Ticket with id={} is not available!", ticket.getId());
-      throw new TicketNotAvailableException();
+      throw new TicketNotAvailableException(String.format("Ticket with id = %d is not available!",ticket.getId()));
     }
     ticket.setIsAvailable(false);
     //todo: Add User-Ticket connection, update tickets table (and users table???)
     if (ticketRepository.update(ticket) == 0) {
-      throw new TicketNotFoundException();
+      throw new TicketNotFoundException(String.format("There is no ticket with id = %d.", id));
     }
     return ticketMapper.toDto(ticket);
   }
