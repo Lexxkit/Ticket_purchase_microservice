@@ -42,4 +42,16 @@
     </addColumn>
   </changeSet>
   
+  <changeSet id="reference-to-users" author="Oleg Alekseenko">
+    <addColumn tableName="tickets">
+      <column name="user_id" type="BIGINT">
+      </column>
+    </addColumn>
+    <addForeignKeyConstraint baseTableName="tickets" baseColumnNames="user_id"
+      constraintName="fk_ticket_user"
+      referencedTableName="users" referencedColumnNames="id"
+      onDelete="SET NULL"
+      />
+  </changeSet>
+  
 </databaseChangeLog>
