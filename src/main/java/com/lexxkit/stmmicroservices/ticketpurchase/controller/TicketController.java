@@ -9,6 +9,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -43,8 +45,10 @@ public class TicketController {
     return ticketService.getTicketById(id);
   }
 
+  @PreAuthorize("isAuthenticated()")
   @PostMapping("/{ticket_id}/purchase")
-  public TicketDto buyTicket(@PathVariable(name = "ticket_id") long id) {
-    return ticketService.buyTicket(id);
+  public TicketDto buyTicket(@PathVariable(name = "ticket_id") long id,
+                              Authentication authentication) {
+    return ticketService.buyTicket(id, authentication);
   }
 }

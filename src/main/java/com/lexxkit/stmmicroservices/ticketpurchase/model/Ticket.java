@@ -12,4 +12,5 @@ public class Ticket {
   private BigDecimal price;
   private Route route;
   private Boolean isAvailable;
+  private User user;
 }
