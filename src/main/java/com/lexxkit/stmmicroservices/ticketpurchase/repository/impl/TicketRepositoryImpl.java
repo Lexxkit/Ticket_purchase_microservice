@@ -53,8 +53,8 @@ public class TicketRepositoryImpl implements TicketRepository {
   @Override
   public int update(Ticket ticket) {
     return jdbcTemplate.update(
-        "update tickets set is_available = ? where id = ?",
-        ticket.getIsAvailable(), ticket.getId()
+        "update tickets set is_available = ?, user_id = ? where id = ?",
+        ticket.getIsAvailable(), ticket.getUser().getId(), ticket.getId()
     );
   }
 }
