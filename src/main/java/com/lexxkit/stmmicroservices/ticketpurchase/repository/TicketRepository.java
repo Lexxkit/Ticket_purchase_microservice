@@ -12,4 +12,6 @@ public interface TicketRepository {
   Optional<Ticket> findById(long id);
 
   int update(Ticket ticket);
+
+  List<Ticket> findTicketsForUser(long id);
 }

@@ -56,4 +56,10 @@ public class TicketService {
     }
     return ticketMapper.toDto(ticket);
   }
+
+  public List<TicketDto> getCurrentUserTickets(Authentication authentication) {
+    User user = userRepository.findUserByLogin(authentication.getName())
+        .orElseThrow(UserNotFoundException::new);
+    return ticketMapper.toDtoList(ticketRepository.findTicketsForUser(user.getId()));
+  }
 }

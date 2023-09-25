@@ -7,7 +7,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -56,7 +55,6 @@ public class TicketController {
   @PreAuthorize("isAuthenticated()")
   @GetMapping("/me")
   public List<TicketDto> getCurrentUserTickets(Authentication authentication) {
-    //todo: ticketService.getCurrentUserTickets(Authentication authentication)
-    return Collections.emptyList();
+    return ticketService.getCurrentUserTickets(authentication);
   }
 }

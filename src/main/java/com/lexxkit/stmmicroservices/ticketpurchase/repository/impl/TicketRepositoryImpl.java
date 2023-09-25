@@ -57,4 +57,15 @@ public class TicketRepositoryImpl implements TicketRepository {
         ticket.getIsAvailable(), ticket.getUser().getId(), ticket.getId()
     );
   }
+
+  @Override
+  public List<Ticket> findTicketsForUser(long id) {
+    return jdbcTemplate.query(
+        "select t.*, r.id as r_id, r.start_point, r.end_point, c.id as c_id, c.title from tickets t "
+            + "left join routes r on t.route_id = r.id "
+            + "left join carriers c on r.carrier_id = c.id "
+            + "where user_id = ? order by t.date_time ASC",
+        rowMapper, id
+    );
+  }
 }
