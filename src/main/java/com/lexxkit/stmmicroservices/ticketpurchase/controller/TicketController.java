@@ -1,5 +1,6 @@
 package com.lexxkit.stmmicroservices.ticketpurchase.controller;
 
+import com.lexxkit.stmmicroservices.ticketpurchase.dto.FilterCriteriaDto;
 import com.lexxkit.stmmicroservices.ticketpurchase.dto.TicketDto;
 import com.lexxkit.stmmicroservices.ticketpurchase.service.TicketService;
 import com.lexxkit.stmmicroservices.ticketpurchase.util.Page;
@@ -36,8 +37,10 @@ public class TicketController {
   )
   @GetMapping
   public List<TicketDto> getAllTickets(@RequestParam(value = "page", defaultValue = "1") long page,
-                                       @RequestParam(value = "size", defaultValue = "10") long size) {
-    return ticketService.getAllAvailableTickets(Page.of(page, size));
+                                       @RequestParam(value = "size", defaultValue = "10") long size,
+                                       FilterCriteriaDto filterCriteriaDto
+  ) {
+    return ticketService.getAllAvailableTickets(Page.of(page, size), filterCriteriaDto);
   }
 
   @GetMapping("/{id}")

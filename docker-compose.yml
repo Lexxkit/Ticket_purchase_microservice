@@ -5,6 +5,8 @@ services:
     build:
       context: .
     container_name: ticket-purchase-app
+    depends_on:
+      - postgres
     restart: no
     ports:
       - ${SPRING_LOCAL_PORT}:${SPRING_DOCKER_PORT}

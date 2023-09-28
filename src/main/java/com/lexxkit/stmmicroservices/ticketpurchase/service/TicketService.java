@@ -1,5 +1,6 @@
 package com.lexxkit.stmmicroservices.ticketpurchase.service;
 
+import com.lexxkit.stmmicroservices.ticketpurchase.dto.FilterCriteriaDto;
 import com.lexxkit.stmmicroservices.ticketpurchase.dto.TicketDto;
 import com.lexxkit.stmmicroservices.ticketpurchase.exception.TicketNotAvailableException;
 import com.lexxkit.stmmicroservices.ticketpurchase.exception.TicketNotFoundException;
@@ -27,8 +28,13 @@ public class TicketService {
   private final TicketRepository ticketRepository;
   private final TicketMapper ticketMapper;
 
-  public List<TicketDto> getAllAvailableTickets(Page page) {
-    return ticketMapper.toDtoList(ticketRepository.findAllAvailable(page));
+  public List<TicketDto> getAllAvailableTickets(Page page, FilterCriteriaDto filterCriteriaDto) {
+    LocalDateTime filterDateTime = filterCriteriaDto.getDateTime();
+    String filterStartOrEndPoint = filterCriteriaDto.getStartOrEndPoint();
+    String filterCarrierTitle = filterCriteriaDto.getCarrierTitle();
+    return ticketMapper.toDtoList(ticketRepository.findAllAvailable(
+        page, filterDateTime, filterStartOrEndPoint, filterCarrierTitle
+    ));
   }
 
   public TicketDto getTicketById(long id) {
