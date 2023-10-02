@@ -1,5 +1,6 @@
 package com.lexxkit.stmmicroservices.ticketpurchase.controller;
 
+import com.lexxkit.stmmicroservices.ticketpurchase.dto.FilterCriteriaDto;
 import com.lexxkit.stmmicroservices.ticketpurchase.dto.TicketDto;
 import com.lexxkit.stmmicroservices.ticketpurchase.service.TicketService;
 import com.lexxkit.stmmicroservices.ticketpurchase.util.Page;
@@ -7,7 +8,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -37,8 +37,10 @@ public class TicketController {
   )
   @GetMapping
   public List<TicketDto> getAllTickets(@RequestParam(value = "page", defaultValue = "1") long page,
-                                       @RequestParam(value = "size", defaultValue = "10") long size) {
-    return ticketService.getAllAvailableTickets(Page.of(page, size));
+                                       @RequestParam(value = "size", defaultValue = "10") long size,
+                                       FilterCriteriaDto filterCriteriaDto
+  ) {
+    return ticketService.getAllAvailableTickets(Page.of(page, size), filterCriteriaDto);
   }
 
   @GetMapping("/{id}")
@@ -56,7 +58,6 @@ public class TicketController {
   @PreAuthorize("isAuthenticated()")
   @GetMapping("/me")
   public List<TicketDto> getCurrentUserTickets(Authentication authentication) {
-    //todo: ticketService.getCurrentUserTickets(Authentication authentication)
-    return Collections.emptyList();
+    return ticketService.getCurrentUserTickets(authentication);
   }
 }
