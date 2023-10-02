@@ -1,5 +1,6 @@
 package com.lexxkit.stmmicroservices.ticketpurchase.security;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -8,6 +9,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -15,6 +17,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
+@RequiredArgsConstructor
 public class WebSecurityConfig {
 
   private static final String[] AUTH_WHITELIST = {
@@ -32,12 +35,17 @@ public class WebSecurityConfig {
     http
         .httpBasic(Customizer.withDefaults())
         .csrf(AbstractHttpConfigurer::disable)
+        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests((authz) ->
         authz
             .requestMatchers(AUTH_WHITELIST).permitAll()
             .requestMatchers(HttpMethod.POST, "/api/tickets/**").authenticated()
             .requestMatchers(HttpMethod.GET, "/api/tickets/**").permitAll()
         );
+
+//    http.authenticationProvider(authenticationProvider());
+//    http.addFilterBefore(authenticationJwtTokenFilter(),
+//        UsernamePasswordAuthenticationFilter.class);
 
     return http.build();
   }

@@ -1,7 +1,7 @@
 package com.lexxkit.stmmicroservices.ticketpurchase.controller;
 
-import com.lexxkit.stmmicroservices.ticketpurchase.dto.LoginUserDto;
-import com.lexxkit.stmmicroservices.ticketpurchase.dto.RegisterUserDto;
+import com.lexxkit.stmmicroservices.ticketpurchase.dto.LoginRequestJwtDto;
+import com.lexxkit.stmmicroservices.ticketpurchase.dto.RegisterRequestDto;
 import com.lexxkit.stmmicroservices.ticketpurchase.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,8 +20,8 @@ public class AuthController {
   private final AuthService authService;
 
   @PostMapping("/register")
-  public ResponseEntity<?> register(@Valid @RequestBody RegisterUserDto registerUserDto) {
-    if (authService.register(registerUserDto)) {
+  public ResponseEntity<?> register(@Valid @RequestBody RegisterRequestDto registerRequestDto) {
+    if (authService.register(registerRequestDto)) {
       return ResponseEntity.ok().build();
     }else {
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -29,8 +29,8 @@ public class AuthController {
   }
 
   @PostMapping("/login")
-  public ResponseEntity<?> login(@Valid @RequestBody LoginUserDto loginUserDto) {
-    if (authService.login(loginUserDto)) {
+  public ResponseEntity<?> login(@Valid @RequestBody LoginRequestJwtDto loginRequestJwtDto) {
+    if (authService.login(loginRequestJwtDto)) {
       return ResponseEntity.ok().build();
     } else {
       return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
