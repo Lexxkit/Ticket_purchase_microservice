@@ -1,6 +1,6 @@
 package com.lexxkit.stmmicroservices.ticketpurchase.security;
 
-import com.lexxkit.stmmicroservices.ticketpurchase.security.jwt.JwtFilter;
+import com.lexxkit.stmmicroservices.ticketpurchase.security.filter.JwtFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,8 +27,9 @@ public class WebSecurityConfig {
       "/swagger-ui/index.html",
       "/v3/api-docs/**",
       "/webjars/**",
-      "/api/users/login",
-      "/api/users/register",
+      "/api/auth/login",
+      "/api/auth/register",
+      "/api/auth/token",
       "/error/**"
   };
 
@@ -38,14 +39,15 @@ public class WebSecurityConfig {
         .httpBasic(AbstractHttpConfigurer::disable)
         .csrf(AbstractHttpConfigurer::disable)
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-        .authorizeHttpRequests((authz) ->
+        .authorizeHttpRequests(authz ->
         authz
             .requestMatchers(AUTH_WHITELIST).permitAll()
-            .requestMatchers(HttpMethod.POST, "/api/tickets/**").authenticated()
             .requestMatchers(HttpMethod.GET, "/api/tickets/**").permitAll()
+            //.requestMatchers(HttpMethod.POST, "/api/tickets/**").authenticated()
+            .anyRequest().authenticated()
         );
 
-    http.addFilterAfter(jwtFilter,
+    http.addFilterBefore(jwtFilter,
         UsernamePasswordAuthenticationFilter.class);
 
     return http.build();

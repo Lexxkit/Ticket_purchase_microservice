@@ -31,7 +31,7 @@ public class JwtProvider {
   private final SecretKey jwtRefreshSecret;
   @Value("${jwt.access.expiration.minutes}")
   private long expirationInMinutes;
-  @Value("${wt.refresh.expiration.days}")
+  @Value("${jwt.refresh.expiration.days}")
   private long expirationInDays;
 
   public JwtProvider(
@@ -62,6 +62,7 @@ public class JwtProvider {
     return Jwts.builder()
         .setSubject(String.valueOf(userPrincipal.getUser().getId()))
         .setExpiration(refreshExpiration)
+        .claim("username", userPrincipal.getUsername())
         .signWith(jwtRefreshSecret)
         .compact();
   }
@@ -71,7 +72,7 @@ public class JwtProvider {
   }
 
   public boolean validateRefreshToken(@NonNull String refreshToken) {
-    return validateToken(refreshToken, jwtAccessSecret);
+    return validateToken(refreshToken, jwtRefreshSecret);
   }
 
   private boolean validateToken(@NonNull String token, @NonNull Key secret) {
@@ -79,7 +80,7 @@ public class JwtProvider {
       Jwts.parserBuilder()
           .setSigningKey(secret)
           .build()
-          .parseClaimsJwt(token);
+          .parseClaimsJws(token);
       return true;
     } catch (ExpiredJwtException expEx) {
       log.error("Token expired", expEx);
