@@ -21,11 +21,11 @@ public class RestRespExceptionHandler {
     );
   }
 
-  @ExceptionHandler(value = AuthenticationException.class)
-  @ResponseStatus(HttpStatus.FORBIDDEN)
+  @ExceptionHandler(value = { AuthenticationException.class })
+  @ResponseStatus(HttpStatus.UNAUTHORIZED)
   public ErrorMessage handleAuthenticationException(RuntimeException ex, WebRequest req) {
     return new ErrorMessage(
-        HttpStatus.FORBIDDEN.value(),
+        HttpStatus.UNAUTHORIZED.value(),
         ex.getMessage(),
         req.getDescription(false)
     );
