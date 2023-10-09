@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class LoginResponseJwtDto {
 
-  //todo: Check if this field is useful!
   private final String type = "Bearer";
   private long userId;
   private String accessToken;
