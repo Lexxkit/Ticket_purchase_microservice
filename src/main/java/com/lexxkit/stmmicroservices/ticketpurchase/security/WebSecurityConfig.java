@@ -43,7 +43,6 @@ public class WebSecurityConfig {
         authz
             .requestMatchers(AUTH_WHITELIST).permitAll()
             .requestMatchers(HttpMethod.GET, "/api/tickets/**").permitAll()
-            //.requestMatchers(HttpMethod.POST, "/api/tickets/**").authenticated()
             .anyRequest().authenticated()
         );
 
