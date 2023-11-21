@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
-public class LoginUserDto {
+public class LoginRequestJwtDto {
   @NotBlank
   private String login;
   @NotBlank

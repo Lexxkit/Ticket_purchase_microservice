@@ -1,7 +1,9 @@
 package com.lexxkit.stmmicroservices.ticketpurchase.controller;
 
-import com.lexxkit.stmmicroservices.ticketpurchase.dto.LoginUserDto;
-import com.lexxkit.stmmicroservices.ticketpurchase.dto.RegisterUserDto;
+import com.lexxkit.stmmicroservices.ticketpurchase.dto.LoginRequestJwtDto;
+import com.lexxkit.stmmicroservices.ticketpurchase.dto.LoginResponseJwtDto;
+import com.lexxkit.stmmicroservices.ticketpurchase.dto.RefreshJwtRequestDto;
+import com.lexxkit.stmmicroservices.ticketpurchase.dto.RegisterRequestDto;
 import com.lexxkit.stmmicroservices.ticketpurchase.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -13,15 +15,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/auth")
 @RequiredArgsConstructor
 public class AuthController {
 
   private final AuthService authService;
 
   @PostMapping("/register")
-  public ResponseEntity<?> register(@Valid @RequestBody RegisterUserDto registerUserDto) {
-    if (authService.register(registerUserDto)) {
+  public ResponseEntity<?> register(@Valid @RequestBody RegisterRequestDto registerRequestDto) {
+    if (authService.register(registerRequestDto)) {
       return ResponseEntity.ok().build();
     }else {
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -29,11 +31,17 @@ public class AuthController {
   }
 
   @PostMapping("/login")
-  public ResponseEntity<?> login(@Valid @RequestBody LoginUserDto loginUserDto) {
-    if (authService.login(loginUserDto)) {
-      return ResponseEntity.ok().build();
-    } else {
-      return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-    }
+  public LoginResponseJwtDto login(@Valid @RequestBody LoginRequestJwtDto loginRequestJwtDto) {
+    return authService.login(loginRequestJwtDto);
+  }
+
+  @PostMapping("/token")
+  public LoginResponseJwtDto getNewAccessToken(@Valid @RequestBody RefreshJwtRequestDto request) {
+    return authService.getAccessToken(request.getRefreshToken());
+  }
+
+  @PostMapping("/refresh")
+  public LoginResponseJwtDto getNewRefreshToken(@Valid @RequestBody RefreshJwtRequestDto request) {
+    return authService.getNewRefreshToken(request.getRefreshToken());
   }
 }

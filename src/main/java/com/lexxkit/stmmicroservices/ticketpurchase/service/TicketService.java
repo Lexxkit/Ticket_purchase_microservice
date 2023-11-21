@@ -10,18 +10,22 @@ import com.lexxkit.stmmicroservices.ticketpurchase.model.Ticket;
 import com.lexxkit.stmmicroservices.ticketpurchase.model.User;
 import com.lexxkit.stmmicroservices.ticketpurchase.repository.TicketRepository;
 import com.lexxkit.stmmicroservices.ticketpurchase.repository.UserRepository;
+import com.lexxkit.stmmicroservices.ticketpurchase.security.jwt.JwtAuthentication;
 import com.lexxkit.stmmicroservices.ticketpurchase.util.Page;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.Authentication;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@EnableCaching
 public class TicketService {
 
   private final UserRepository userRepository;
@@ -44,8 +48,9 @@ public class TicketService {
     ));
   }
 
+  @CacheEvict(value = "tickets", key = "#authentication.getName()")
   @Transactional
-  public TicketDto buyTicket(long id, Authentication authentication) {
+  public TicketDto buyTicket(long id, JwtAuthentication authentication) {
     Ticket ticket = ticketRepository.findById(id).orElseThrow(TicketNotFoundException::new);
     if (!ticket.getIsAvailable() || ticket.getDateTime().isBefore(LocalDateTime.now())) {
       log.info("Ticket with id={} is not available!", ticket.getId());
@@ -63,7 +68,8 @@ public class TicketService {
     return ticketMapper.toDto(ticket);
   }
 
-  public List<TicketDto> getCurrentUserTickets(Authentication authentication) {
+  @Cacheable(value = "tickets", key = "#authentication.getName()")
+  public List<TicketDto> getCurrentUserTickets(JwtAuthentication authentication) {
     User user = userRepository.findUserByLogin(authentication.getName())
         .orElseThrow(UserNotFoundException::new);
     return ticketMapper.toDtoList(ticketRepository.findTicketsForUser(user.getId()));

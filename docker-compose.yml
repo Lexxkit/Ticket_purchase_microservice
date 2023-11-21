@@ -7,6 +7,7 @@ services:
     container_name: ticket-purchase-app
     depends_on:
       - postgres
+      - redis
     restart: no
     ports:
       - ${SPRING_LOCAL_PORT}:${SPRING_DOCKER_PORT}
@@ -15,6 +16,8 @@ services:
       SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
       SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
       SPRING_LIQUIBASE_CHANGE_LOG: ${SPRING_LIQUIBASE_CHANGE_LOG}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
 
   postgres:
     image: postgres:latest
@@ -27,3 +30,11 @@ services:
       POSTGRES_DB: ${POSTGRES_DB_NAME}
     volumes:
       - /var/lib/postgresql/data
+
+  redis:
+    image: redis:latest
+    container_name: ticket-purchase-redis
+    ports:
+      - '6379:6379'
+    volumes:
+      - /var/lib/redis/data

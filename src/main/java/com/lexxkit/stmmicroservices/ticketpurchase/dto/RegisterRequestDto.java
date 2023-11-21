@@ -4,7 +4,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
-public class RegisterUserDto {
+public class RegisterRequestDto {
   @NotBlank(message = "Login cannot be blank.")
   private String login;
   @NotBlank(message = "Password cannot be blank.")

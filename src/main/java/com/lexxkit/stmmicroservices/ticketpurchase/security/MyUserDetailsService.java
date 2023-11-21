@@ -4,7 +4,6 @@ import com.lexxkit.stmmicroservices.ticketpurchase.exception.UserNotFoundExcepti
 import com.lexxkit.stmmicroservices.ticketpurchase.model.User;
 import com.lexxkit.stmmicroservices.ticketpurchase.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -17,7 +16,7 @@ public class MyUserDetailsService implements UserDetailsService {
   private final UserRepository userRepository;
 
   @Override
-  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+  public MyUserPrincipal loadUserByUsername(String username) throws UsernameNotFoundException {
     User user = userRepository.findUserByLogin(username).orElseThrow(UserNotFoundException::new);
     userPrincipal.setUser(user);
     return userPrincipal;

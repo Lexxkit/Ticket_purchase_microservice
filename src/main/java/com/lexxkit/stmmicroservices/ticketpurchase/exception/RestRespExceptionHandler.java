@@ -21,7 +21,17 @@ public class RestRespExceptionHandler {
     );
   }
 
-  record ErrorMessage(int statusCode, String message, String description) {
+  @ExceptionHandler(value = { AuthenticationException.class })
+  @ResponseStatus(HttpStatus.UNAUTHORIZED)
+  public ErrorMessage handleAuthenticationException(RuntimeException ex, WebRequest req) {
+    return new ErrorMessage(
+        HttpStatus.UNAUTHORIZED.value(),
+        ex.getMessage(),
+        req.getDescription(false)
+    );
+  }
+
+  public record ErrorMessage(int statusCode, String message, String description) {
 
   }
 }
